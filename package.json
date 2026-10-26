@@ -1,6 +1,6 @@
 {
   "name": "@k-otp/better-auth",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Better Auth plugin for K-OTP phone verification (Kakao AlimTalk, SMS fallback). The code is never returned.",
   "keywords": [
     "k-otp",
