@@ -1,0 +1,93 @@
+{
+  "name": "@k-otp/better-auth",
+  "version": "0.0.0",
+  "description": "Better Auth plugin for K-OTP phone verification (Kakao AlimTalk, SMS fallback). The code is never returned.",
+  "keywords": [
+    "k-otp",
+    "better-auth",
+    "otp",
+    "phone",
+    "alimtalk",
+    "sms",
+    "korea",
+    "authentication"
+  ],
+  "license": "MIT",
+  "author": "1990Company",
+  "homepage": "https://k-otp.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k-otp/better-auth.git"
+  },
+  "bugs": {
+    "url": "https://github.com/k-otp/better-auth/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./client": {
+      "import": {
+        "types": "./dist/client.d.ts",
+        "default": "./dist/client.js"
+      },
+      "require": {
+        "types": "./dist/client.d.cts",
+        "default": "./dist/client.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README_ko.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "bun@1.4.2",
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "ttsc --noEmit -p tsconfig.json && ttsc --noEmit -p tsconfig.test.json",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "bun test --timeout 10000",
+    "check": "bun run typecheck && bun run lint && bun run test && bun run build",
+    "prepublishOnly": "node -e \"const fs=require('fs'); if(!fs.existsSync('dist/index.js')){console.error('dist/ is missing. Run bun run build first, then publish the bun pm pack tarball.'); process.exit(1)}\""
+  },
+  "dependencies": {
+    "@k-otp/sdk": "^2.1.0",
+    "zod": "^4.3.5"
+  },
+  "peerDependencies": {
+    "better-auth": ">=1.7.0 <2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@ttsc/lint": "^0.30.4",
+    "@types/bun": "^1.4.2",
+    "better-auth": "1.7.13",
+    "tsdown": "^0.23.0",
+    "ttsc": "^0.30.4",
+    "typescript": "^7.0.2"
+  }
+}

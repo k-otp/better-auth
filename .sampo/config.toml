@@ -1,0 +1,12 @@
+# Sampo configuration for github.com/k-otp/better-auth
+version = 1
+
+[git]
+default_branch = "main"
+
+[github]
+repository = "k-otp/better-auth"
+
+[packages]
+# Ignore any package that can't be published (e.g. "private": true).
+ignore_unpublished = true
