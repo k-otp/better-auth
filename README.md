@@ -39,11 +39,11 @@ account. Both routes require that session.
 
 | Method | Path | Body | Client |
 | --- | --- | --- | --- |
-| POST | `/kotp/issue` | `{ phoneNumber }` | `authClient.kotp.issue({ phoneNumber })` |
-| POST | `/kotp/verify` | `{ code }` | `authClient.kotp.verify({ code })` |
+| POST | `/k-otp/issue` | `{ phoneNumber }` | `authClient.kOtp.issue({ phoneNumber })` |
+| POST | `/k-otp/verify` | `{ code }` | `authClient.kOtp.verify({ code })` |
 
 Paths sit under the Better Auth base path (`/api/auth` by default), so the
-HTTP routes are `/api/auth/kotp/issue` and `/api/auth/kotp/verify`. They are
+HTTP routes are `/api/auth/k-otp/issue` and `/api/auth/k-otp/verify`. They are
 namespaced so they do not collide with Better Auth's built-in phone-number
 plugin.
 
@@ -79,8 +79,8 @@ export const authClient = createAuthClient({
   plugins: [kotpClient()],
 });
 
-await authClient.kotp.issue({ phoneNumber: "010-1234-5678" });
-await authClient.kotp.verify({ code: "123456" });
+await authClient.kOtp.issue({ phoneNumber: "010-1234-5678" });
+await authClient.kOtp.verify({ code: "123456" });
 ```
 
 Import the client plugin from `@k-otp/better-auth/client` in the browser. The

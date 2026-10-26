@@ -207,7 +207,7 @@ describe("kotp plugin", () => {
     const { fetch, calls } = successFetch();
     const { client } = boot({ fetch });
     await signUp(client, "a@example.com");
-    const issued = await client.kotp.issue({ phoneNumber: PHONE });
+    const issued = await client.kOtp.issue({ phoneNumber: PHONE });
     expect(issued.error).toBeNull();
     const data = issued.data;
     expect(data?.issueId).toBe(ISSUE.issueId);
@@ -234,8 +234,8 @@ describe("kotp plugin", () => {
     const { fetch } = successFetch();
     const { auth, client } = boot({ fetch });
     await signUp(client, "a@example.com");
-    expect((await client.kotp.issue({ phoneNumber: PHONE })).error).toBeNull();
-    const verified = await client.kotp.verify({ code: CODE });
+    expect((await client.kOtp.issue({ phoneNumber: PHONE })).error).toBeNull();
+    const verified = await client.kOtp.verify({ code: CODE });
     expect(verified.error).toBeNull();
     expect(verified.data?.verified).toBe(true);
     expect(verified.data).not.toHaveProperty("code");
@@ -270,9 +270,9 @@ describe("kotp plugin", () => {
       },
     });
     await signUp(client, "enc@example.com");
-    expect((await client.kotp.issue({ phoneNumber: PHONE })).error).toBeNull();
+    expect((await client.kOtp.issue({ phoneNumber: PHONE })).error).toBeNull();
     expect(calls).toBe(0);
-    expect((await client.kotp.verify({ code: CODE })).error).toBeNull();
+    expect((await client.kOtp.verify({ code: CODE })).error).toBeNull();
     expect(calls).toBe(1);
     const ctx = await auth.$context;
     const user = await ctx.adapter.findOne<Record<string, unknown>>({
@@ -302,9 +302,9 @@ describe("kotp plugin", () => {
       const { client } = boot({ fetch });
       await signUp(client, `${reasonCode.toLowerCase()}@example.com`);
       expect(
-        (await client.kotp.issue({ phoneNumber: PHONE })).error,
+        (await client.kOtp.issue({ phoneNumber: PHONE })).error,
       ).toBeNull();
-      const verified = await client.kotp.verify({ code: CODE });
+      const verified = await client.kOtp.verify({ code: CODE });
       expect(verified.data).toBeNull();
       expect(verified.error?.code).toBe(errorCode);
     }
@@ -347,9 +347,9 @@ describe("kotp plugin", () => {
     });
     await signUp(clientA, "owner-a@example.com");
     await signUp(clientB, "owner-b@example.com");
-    expect((await clientA.kotp.issue({ phoneNumber: PHONE })).error).toBeNull();
+    expect((await clientA.kOtp.issue({ phoneNumber: PHONE })).error).toBeNull();
     const before = calls.filter((call) => call.url.endsWith("/verify")).length;
-    const stolen = await clientB.kotp.verify({ code: CODE });
+    const stolen = await clientB.kOtp.verify({ code: CODE });
     expect(stolen.error?.code).toBe("KOTP_PENDING_ISSUE_NOT_FOUND");
     expect(calls.filter((call) => call.url.endsWith("/verify")).length).toBe(
       before,
@@ -366,8 +366,8 @@ describe("kotp plugin", () => {
     const { fetch, calls } = successFetch();
     const { client } = boot({ fetch, cooldownSeconds: 60 });
     await signUp(client, "cool@example.com");
-    expect((await client.kotp.issue({ phoneNumber: PHONE })).error).toBeNull();
-    const again = await client.kotp.issue({ phoneNumber: "01012345678" });
+    expect((await client.kOtp.issue({ phoneNumber: PHONE })).error).toBeNull();
+    const again = await client.kOtp.issue({ phoneNumber: "01012345678" });
     expect(again.error?.code).toBe("KOTP_COOLDOWN");
     expect(again.error?.status).toBe(429);
     expect(calls.filter((call) => call.url.endsWith("/issue"))).toHaveLength(1);
@@ -381,7 +381,7 @@ describe("kotp plugin", () => {
     );
     const { auth, client } = boot({ fetch });
     await signUp(client, "credits@example.com");
-    const issued = await client.kotp.issue({ phoneNumber: PHONE });
+    const issued = await client.kOtp.issue({ phoneNumber: PHONE });
     expect(issued.error?.code).toBe("KOTP_CREDITS_EXHAUSTED");
     expect(issued.error?.status).toBe(402);
     const ctx = await auth.$context;
@@ -406,15 +406,15 @@ describe("kotp plugin", () => {
     });
     const { client } = boot({ fetch });
     await signUp(client, "retry@example.com");
-    const first = await client.kotp.issue({ phoneNumber: PHONE });
+    const first = await client.kOtp.issue({ phoneNumber: PHONE });
     expect(first.error?.code).toBe("KOTP_UNAVAILABLE");
     expect(first.error?.status).toBe(503);
     expect(first.error).toMatchObject({ retryable: true });
     mode = "503";
-    const second = await client.kotp.issue({ phoneNumber: PHONE });
+    const second = await client.kOtp.issue({ phoneNumber: PHONE });
     expect(second.error?.code).toBe("KOTP_UNAVAILABLE");
     mode = "ok";
-    const third = await client.kotp.issue({ phoneNumber: PHONE });
+    const third = await client.kOtp.issue({ phoneNumber: PHONE });
     expect(third.error).toBeNull();
     const keys = calls.map((call) => call.headers.get("idempotency-key"));
     expect(keys[0]).toBeTruthy();
@@ -432,10 +432,10 @@ describe("kotp plugin", () => {
         seen.push(`${mode}:${phoneHash}:${phone}`);
       },
     });
-    const issued = await client.kotp.issue({ phoneNumber: PHONE });
+    const issued = await client.kOtp.issue({ phoneNumber: PHONE });
     expect(issued.error).toBeNull();
     expect(issued.data).not.toHaveProperty("code");
-    const verified = await client.kotp.verify({ code: CODE });
+    const verified = await client.kOtp.verify({ code: CODE });
     expect(verified.error).toBeNull();
     expect(verified.data?.verified).toBe(true);
     const session = await client.getSession();

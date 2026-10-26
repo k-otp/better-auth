@@ -39,11 +39,11 @@ export const auth = betterAuth({
 
 | 메서드 | 경로 | 본문 | 클라이언트 |
 | --- | --- | --- | --- |
-| POST | `/kotp/issue` | `{ phoneNumber }` | `authClient.kotp.issue({ phoneNumber })` |
-| POST | `/kotp/verify` | `{ code }` | `authClient.kotp.verify({ code })` |
+| POST | `/k-otp/issue` | `{ phoneNumber }` | `authClient.kOtp.issue({ phoneNumber })` |
+| POST | `/k-otp/verify` | `{ code }` | `authClient.kOtp.verify({ code })` |
 
 Better Auth 베이스 경로(기본 `/api/auth`) 아래이므로 실제 HTTP 경로는
-`/api/auth/kotp/issue`, `/api/auth/kotp/verify`입니다. Better Auth 내장
+`/api/auth/k-otp/issue`, `/api/auth/k-otp/verify`입니다. Better Auth 내장
 phone-number 플러그인과 경로가 겹치지 않도록 `kotp` 접두사를 씁니다.
 
 `issue`는 `Idempotency-Key`(UUID)를 만들고, 대기 중인 발급(issue id, 번호
@@ -77,8 +77,8 @@ export const authClient = createAuthClient({
   plugins: [kotpClient()],
 });
 
-await authClient.kotp.issue({ phoneNumber: "010-1234-5678" });
-await authClient.kotp.verify({ code: "123456" });
+await authClient.kOtp.issue({ phoneNumber: "010-1234-5678" });
+await authClient.kOtp.verify({ code: "123456" });
 ```
 
 브라우저에서는 `@k-otp/better-auth/client`만 가져오세요. 루트 엔트리는 서버

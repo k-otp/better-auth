@@ -273,14 +273,14 @@ const rateLimitRules = (
   const verify = options.rateLimit?.verify ?? { window: 60, max: 10 };
   if (issue) {
     rules.push({
-      pathMatcher: (path: string) => path === "/kotp/issue",
+      pathMatcher: (path: string) => path === "/k-otp/issue",
       window: issue.window,
       max: issue.max,
     });
   }
   if (verify) {
     rules.push({
-      pathMatcher: (path: string) => path === "/kotp/verify",
+      pathMatcher: (path: string) => path === "/k-otp/verify",
       window: verify.window,
       max: verify.max,
     });
@@ -660,11 +660,11 @@ const mapReason = (
  * Better Auth server plugin for K-OTP phone verification.
  *
  * Paths (under the auth base path, `/api/auth` by default):
- * - `POST /kotp/issue` — `{ phoneNumber }`
- * - `POST /kotp/verify` — `{ code }`
+ * - `POST /k-otp/issue` — `{ phoneNumber }`
+ * - `POST /k-otp/verify` — `{ code }`
  *
- * The client plugin exposes these as `authClient.kotp.issue` /
- * `authClient.kotp.verify`. The OTP code is never returned.
+ * The client plugin exposes these as `authClient.kOtp.issue` /
+ * `authClient.kOtp.verify`. The OTP code is never returned.
  */
 export const kotp = (options: KotpOptions): BetterAuthPlugin => {
   const settings = resolveOptions(options);
@@ -675,7 +675,7 @@ export const kotp = (options: KotpOptions): BetterAuthPlugin => {
   });
 
   const issue = createAuthEndpoint(
-    "/kotp/issue",
+    "/k-otp/issue",
     {
       method: "POST",
       body: z.object({
@@ -788,7 +788,7 @@ export const kotp = (options: KotpOptions): BetterAuthPlugin => {
   );
 
   const verify = createAuthEndpoint(
-    "/kotp/verify",
+    "/k-otp/verify",
     {
       method: "POST",
       body: z.object({
@@ -934,7 +934,7 @@ export const kotp = (options: KotpOptions): BetterAuthPlugin => {
   );
 
   return {
-    id: "kotp",
+    id: "k-otp",
     version: PLUGIN_VERSION,
     endpoints: { issue, verify },
     schema: kotpSchema(settings),
