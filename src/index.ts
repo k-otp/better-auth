@@ -1,3 +1,5 @@
+import type {} from "@better-auth/core";
+
 import { kotpClient } from "./client";
 import { KOTP_ERROR_CODES, type KotpError, type KotpErrorCode } from "./errors";
 import {
@@ -28,7 +30,7 @@ export {
 
 declare module "@better-auth/core" {
   interface BetterAuthPluginRegistry<AuthOptions, Options> {
-    kotp: {
+    "k-otp": {
       creator: typeof kotp;
     };
   }

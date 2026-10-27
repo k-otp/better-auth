@@ -1,13 +1,7 @@
-import type { BetterAuthClientPlugin } from "better-auth/client";
+import type { BetterAuthClientPlugin } from "@better-auth/core";
 
 import { KOTP_ERROR_CODES } from "./errors";
 import type { kotp } from "./plugin";
-
-export type KotpClientPlugin = BetterAuthClientPlugin & {
-  id: "k-otp";
-  $InferServerPlugin: ReturnType<typeof kotp>;
-  $ERROR_CODES: typeof KOTP_ERROR_CODES;
-};
 
 /**
  * Client plugin. Infers `authClient.kOtp.issue` and `authClient.kOtp.verify`
@@ -15,8 +9,12 @@ export type KotpClientPlugin = BetterAuthClientPlugin & {
  *
  * Import this from `@k-otp/better-auth/client` in browser bundles. The root
  * entry loads the server plugin and `@k-otp/sdk/server`.
+ *
+ * `satisfies` (not a `BetterAuthClientPlugin` return annotation) keeps
+ * `$InferServerPlugin` concrete. Annotating the return widens endpoints to
+ * an index signature and drops inference for this plugin and its siblings.
  */
-export const kotpClient = (): KotpClientPlugin => {
+export const kotpClient = () => {
   return {
     id: "k-otp",
     $InferServerPlugin: {} as ReturnType<typeof kotp>,
@@ -27,5 +25,7 @@ export const kotpClient = (): KotpClientPlugin => {
         signal: "$sessionSignal",
       },
     ],
-  };
+  } satisfies BetterAuthClientPlugin;
 };
+
+export type KotpClientPlugin = ReturnType<typeof kotpClient>;
