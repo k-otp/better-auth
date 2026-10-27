@@ -6,6 +6,10 @@ const shared = {
   tsconfig: "tsconfig.json",
   sourcemap: true,
   clean: false,
+  // Declarations are emitted by `ttsc -p tsconfig.dts.json`. oxc's dts
+  // generator requires isolatedDeclarations and would widen `kotp()` back
+  // to `BetterAuthPlugin`, which drops client endpoint inference.
+  dts: false,
 };
 
 const entry = {
@@ -18,12 +22,10 @@ export default defineConfig([
     ...shared,
     entry,
     format: "esm",
-    dts: { generator: "oxc" },
   },
   {
     ...shared,
     entry,
     format: "cjs",
-    dts: { generator: "oxc" },
   },
 ]);

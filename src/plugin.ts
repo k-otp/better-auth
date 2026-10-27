@@ -1,5 +1,5 @@
+import type { BetterAuthPlugin } from "@better-auth/core";
 import { createOtpServerClient, isOtpApiError } from "@k-otp/sdk/server";
-import type { BetterAuthPlugin } from "better-auth";
 import {
   APIError,
   createAuthEndpoint,
@@ -666,7 +666,7 @@ const mapReason = (
  * The client plugin exposes these as `authClient.kOtp.issue` /
  * `authClient.kOtp.verify`. The OTP code is never returned.
  */
-export const kotp = (options: KotpOptions): BetterAuthPlugin => {
+export const kotp = (options: KotpOptions) => {
   const settings = resolveOptions(options);
   const otp = createOtpServerClient({
     apiKey: settings.secretKey,
@@ -940,7 +940,7 @@ export const kotp = (options: KotpOptions): BetterAuthPlugin => {
     schema: kotpSchema(settings),
     rateLimit: rateLimitRules(settings),
     $ERROR_CODES: KOTP_ERROR_CODES,
-  };
+  } satisfies BetterAuthPlugin;
 };
 
 const recoverPhone = async (
